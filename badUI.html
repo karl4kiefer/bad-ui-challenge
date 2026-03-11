@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ACM Bad UI</title>
+
+  <style>
+    #btn {
+  font-size: 15pt;
+  font-weight: 500;
+  padding: 12px;
+  margin: 20px;
+  position: absolute;
+  width: 180px;
+}
+.C1 {
+  text-align: center;
+  background-color: gray;
+  padding: 15px;
+  margin: 20px;
+  color: white;
+}
+
+.text {
+  margin: 20px;
+}
+
+.blt {
+  bottom: 0;
+  left: 0;
+  margin: 20px;
+  position: fixed;
+}
+
+
+  </style>
+
+  
+</head>
+<body>
+  <title> Feedback Survey </title>
+
+<h1 class="C1"> Your feedback matters to us. </h1>
+
+<h3 class="text"> What would you rate us out of 10? </h3>
+<p class="text"><span id="update_rating"></p>
+
+
+<button id="btn", onclick="UpdateNum()", > Increase Rating! </button>
+
+<p class="blt", id="ragebait"></p>
+
+  <script>
+    let stars = ["☆","☆","☆","☆","☆","☆","☆","☆","☆","☆"]; let rating = -2; UpdateNum();
+let btn = document.getElementById('btn');
+
+
+// ------> Current Rating Logic <------
+
+function AddNum() { // Add a number to the current rating.
+  let full = "";
+  rating++;
+  stars[rating] = "★";
+
+  for(let i = 0; i < 10; i++) {
+    full += stars[i];
+  }
+  return full;
+}
+function UpdateNum() { // Update the displayed number.
+  document.getElementById('update_rating').innerHTML = AddNum();
+}
+
+// ------> Ragebait <------
+
+setTimeout(ragebait, 60000);
+
+function ragebait() {
+  document.getElementById('ragebait').innerHTML = "Your feedback is critical to improving our services. Please rate us.";
+}
+
+// ------> Button Movement Logic <------
+
+let centerX = (btn.getBoundingClientRect().left + btn.getBoundingClientRect().right) / 2;
+let centerY = (btn.getBoundingClientRect().top + btn.getBoundingClientRect().bottom) / 2;
+
+function UpdateCenter() { // Updates the center of the button
+  centerX = (btn.getBoundingClientRect().left + btn.getBoundingClientRect().right) / 2;
+  centerY = (btn.getBoundingClientRect().top + btn.getBoundingClientRect().bottom) / 2;
+}
+
+btn.addEventListener('mousemove', onMouseMoveLeft);
+function onMouseMoveLeft(event) { // Triggers when mouse touches the left
+  if (event.clientX <= centerX) {
+    if (btn.getBoundingClientRect().right <= window.innerWidth) {
+      console.log('Moved Right!', screen.width);
+      btn.style.left = (event.clientX + 1) + 'px';
+    } else if (btn.getBoundingClientRect().right > window.innerWidth) {
+      btn.style.left = (event.clientX - 200) + 'px';
+    }
+    UpdateCenter();
+  }
+}
+
+btn.addEventListener('mousemove', onMouseMoveRight);
+function onMouseMoveRight(event) { // Triggers when mouse touches the right
+  if (event.clientX > centerX) {
+    if (btn.getBoundingClientRect().left >= 0) {
+      btn.style.left = (event.clientX - 210) + 'px';
+    } else if (btn.getBoundingClientRect().left < 0) {
+      btn.style.left = (event.clientX + 20) + 'px';
+    }
+    UpdateCenter();
+  }
+}
+
+btn.addEventListener('mousemove', onMouseMoveUp);
+function onMouseMoveUp(event) { // Triggers when mouse touches the bottom
+  if (event.clientY <= centerY) {
+    btn.style.bottom = (event.clientY + 20) + 'px';
+  }
+  UpdateCenter();
+}
+
+btn.addEventListener('mousemove', onMouseMoveDown);
+function onMouseMoveDown(event) { // Triggers when mouse touches the top
+  if (event.clientY > centerY) {
+    btn.style.bottom = (event.clientY - 200) + 'px';
+  }
+  UpdateCenter();
+}
+
+// Event listener for screen bounds rather than implementing it in each function?
+
+
+document.addEventListener('mousemove', function (event) {
+  console.log(
+    'MX: ',
+    event.clientX,
+    'MY: ',
+    event.clientY,
+    'BL: ',
+    window.getComputedStyle(btn).left,
+    'BR: ',
+    window.getComputedStyle(btn).right,
+    'BT: ',
+    window.getComputedStyle(btn).top,
+    'BB: ',
+    window.getComputedStyle(btn).bottom,
+    'W: ',
+    window.innerWidth,
+    'H: ',
+    window.innerHeight,
+    'CX: ',
+    centerX
+  );
+});
+
+  </script>
+</body>
+</html>
